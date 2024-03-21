@@ -4,7 +4,7 @@ import json
 
 # Set page config
 st.set_page_config(
-    page_title="PerilMapp", 
+    page_title="prettymapp", 
     page_icon="🖼️", 
     initial_sidebar_state="collapsed",
     layout="wide"
@@ -15,22 +15,34 @@ def render_header():
 
 def main():
     render_header()
-    with open("map_catnat.html", "r") as f:
-        html_content = f.read()
 
-    # Create a large container
-    with st.container(height=600):
-        # Create two columns
-        col1, col2 = st.columns([3, 2])
+    # Add France.jpg image in the sidebar
+    st.sidebar.image("Image/France.jpg", use_column_width=True)
 
-        # Display the HTML map in the first column
-        with col1:
+    # Define the list of tickers
+    ticker_list = ['DVF', 'CATNET']
+
+    # Add a select box for choosing the ticker in the sidebar
+    ticker = st.sidebar.selectbox("Choix donnés", ticker_list)
+
+    # Determine which map HTML file to display based on the selected ticker
+    map_html_file = None  # Initialize map_html_file variable
+    if ticker == 'DVF':
+        map_html_file = "map_DVF_Adresse.html"
+    elif ticker == 'CATNET':
+        map_html_file = "map_catnat.html"
+        # Display another dropdown for selecting risks
+        selected_risk = st.sidebar.selectbox("Select Risk", ['Inondation', 'Tempête', 'Sécheresse'])
+
+    if map_html_file:
+        # Load and display the selected map HTML file
+        with open(map_html_file, "r") as f:
+            html_content = f.read()
+
+        # Create a large container
+        with st.container(height=600):
+            # Display the HTML map
             st.components.v1.html(html_content, width=800, height=600)
-
-        # Write the description in the second column
-        with col2:
-            st.write("## Map Description")
-            st.write("Our newly developed interactive map provides valuable insights into flood risk based on frequency. Whether you’re a homeowner, insurer, or policy decision-maker, this map empowers you to make informed choices")
 
 if __name__ == "__main__":
     main()
@@ -80,16 +92,5 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
+    
 )
-
-# Additional content goes here
-st.sidebar.markdown("# Risque Selection")
-_list = ['Innondation', 'Tempête', 'Sécheresse']
-ticker = st.sidebar.selectbox("Choose Your Risk", _list)
-
-# Add images in the sidebar
-st.sidebar.image("IMAGE/credit-agricole-nord-de-france.jpg", width=150)
-st.sidebar.image("IMAGE/IESEG.png", width=150)
-
-
-
