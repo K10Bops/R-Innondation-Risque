@@ -7,9 +7,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
     layout="wide"
 )
-tab1, tab2 = st.columns(2)
+tab1, tab2 = st.tabs(["Tab 1", "Tab 2"])
 
 with tab1:
+    st.header("Tab 1")
     def render_header():
         st.title("Visulaisations et Cartes")
 
@@ -17,7 +18,8 @@ with tab1:
         render_header()
 
         # Add France.jpg image in the sidebar
-        st.sidebar.image("Image/France.jpg", use_column_width=True)
+        st.sidebar.image("Image/credit-agricole-nord-de-france.jpg", use_column_width=True)
+        st.sidebar.image("Image/IESEG.png", use_column_width=True)
 
         # Define the list of tickers
         ticker_list = ['DVF', 'CATNET']
@@ -76,7 +78,7 @@ with tab1:
         unsafe_allow_html=True
     )
 with tab2:
-
+    st.header("Tab 2")
     # Define the list of HTML files for visualization
     html_files = ["plotly_plot1.html", "plotly_plot2.html", "plotly_plot3.html"]
 
