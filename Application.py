@@ -45,8 +45,8 @@ def main():
 
     # Sidebar selections for disasters
     disaster = st.sidebar.selectbox(
-        "SÃ©lectionner le type de catastrophe", 
-        ['Inondation', 'SÃ©cheresse'],
+        "Sélectionner le type de catastrophe", 
+        ['Inondation', 'Sécheresse'],
         index=0
     )
 
@@ -59,7 +59,7 @@ def main():
 
         # Define the list of levels
         levels = ['Commune', 'Adresse']
-        level = st.sidebar.selectbox("SÃ©lectionner le niveau de la carte", levels)
+        level = st.sidebar.selectbox("Sélectionner le niveau de la carte", levels)
         
         # Determine the map file based on the selections
         map_html_file = f"{level} level {disaster.lower()} map.html"
@@ -79,14 +79,14 @@ def display_map(map_html_file):
             html_content = f.read()
         st.components.v1.html(html_content, width=1400, height=800, scrolling=True)
     except FileNotFoundError:
-        st.error("Le fichier de la carte n'a pas Ã©tÃ© trouvÃ©.")
+        st.error("Le fichier de la carte n'a pas été trouvé.")
 
 # Function to display visualizations
 def display_visualization(disaster):
     # Maps the disaster type to its corresponding visualization files
     visualization_files = {
         'inondation': ['heatmap_inondation', 'barchart_inondation', 'top20_inondation'],
-        'sÃ©cheresse': ['heatmap_secheresse', 'barchart_secheresse', 'top20_secheresse']
+        'sécheresse': ['heatmap_secheresse', 'barchart_secheresse', 'top20_secheresse']
     }
     
     for vis in visualization_files.get(disaster, []):
@@ -96,7 +96,8 @@ def display_visualization(disaster):
                 html_content = f.read()
             st.components.v1.html(html_content, width=1000, height=600, scrolling=True)
         except FileNotFoundError:
-            st.error(f"Le fichier de visualisation {vis} n'a pas Ã©tÃ© trouvÃ©.")
+            st.error(f"Le fichier de visualisation {vis} n'a pas été trouvé.")
 
 if __name__ == "__main__":
     main()
+
