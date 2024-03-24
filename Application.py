@@ -3,7 +3,7 @@ import os
 
 # Set page config
 st.set_page_config(
-    page_title="Visualisations et Cartes",
+    page_title="Data App",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -85,19 +85,20 @@ def display_map(map_html_file):
 def display_visualization(disaster):
     # Maps the disaster type to its corresponding visualization files
     visualization_files = {
-        'inondation': ['heatmap_inondation', 'barchart_inondation', 'top20_inondation'],
-        'sécheresse': ['heatmap_secheresse', 'barchart_secheresse', 'top20_secheresse']
+        'inondation': ['heatmap_inondation', 'barchart_inondation', 'top10_inondation'],
+        'sécheresse': ['heatmap_secheresse', 'barchart_secheresse', 'top10_secheresse']
     }
     
     for vis in visualization_files.get(disaster, []):
         try:
-            file_path = os.path.join(r'C:\Users\Source\Downloads\app credit agricole', f"{vis}.html") # Update with correct path
+            file_path = f"{vis}.html" #Update with correct file path
             with open(file_path, 'r', encoding='utf-8') as f:
                 html_content = f.read()
-            st.components.v1.html(html_content, width=1000, height=600, scrolling=True)
+            st.components.v1.html(html_content, width=1200, height=500, scrolling=True)
         except FileNotFoundError:
             st.error(f"Le fichier de visualisation {vis} n'a pas été trouvé.")
 
 if __name__ == "__main__":
     main()
+
 
