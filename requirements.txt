@@ -6,3 +6,4 @@ streamlit
 streamlit-image-select
 geopandas
 os
+urllib.parse

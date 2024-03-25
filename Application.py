@@ -1,4 +1,5 @@
 import streamlit as st
+import urllib.parse
 import os
 
 # Set page config
@@ -72,9 +73,11 @@ def main():
         # Determine the visualization files based on the disaster
         display_visualization(disaster.lower())
 
-# Function to display the map
 def display_map(map_html_file):
     try:
+        # Replace spaces with %20 for URL encoding
+        map_html_file_encoded = urllib.parse.quote(map_html_file)
+        
         with open(map_html_file, 'r', encoding='utf-8') as f:
             html_content = f.read()
         st.components.v1.html(html_content, width=1400, height=800, scrolling=True)
@@ -85,13 +88,13 @@ def display_map(map_html_file):
 def display_visualization(disaster):
     # Maps the disaster type to its corresponding visualization files
     visualization_files = {
-        'inondation': ['heatmap_inondation.html', 'barchart_inondation.html', 'top10_inondation.html'],
-        'sécheresse': ['heatmap_secheresse.html', 'barchart_secheresse.html', 'top10_secheresse.html']
+        'inondation': ['heatmap_inondation', 'barchart_inondation', 'top10_inondation'],
+        'sécheresse': ['heatmap_secheresse', 'barchart_secheresse', 'top10_secheresse']
     }
     
     for vis in visualization_files.get(disaster, []):
         try:
-            file_path = vis
+            file_path = f"{vis}.html" 
             with open(file_path, 'r', encoding='utf-8') as f:
                 html_content = f.read()
             st.components.v1.html(html_content, width=1200, height=500, scrolling=True)
@@ -100,8 +103,5 @@ def display_visualization(disaster):
 
 if __name__ == "__main__":
     main()
-
-
-
 
 
