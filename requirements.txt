@@ -5,6 +5,5 @@ matplotlib
 streamlit-image-select
 geopandas
 folium
-folium.plugins
 streamlit
 
