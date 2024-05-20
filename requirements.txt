@@ -2,8 +2,11 @@ pandas
 numpy
 osmnx
 matplotlib
-streamlit
 streamlit-image-select
 geopandas
 os
 urllib.parse
+folium
+folium.plugins
+streamlit
+
