@@ -5,7 +5,7 @@ matplotlib
 streamlit-image-select
 geopandas
 
-urllib.parse
+urllib
 folium
 folium.plugins
 streamlit
