@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_91add9ba701de59c53502fbd7c7638ce {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+             <h3 align="center" style="font-size:20px"><b>Top 10 Inondations per Département</b></h3>
+             
+    
+            <div class="folium-map" id="map_91add9ba701de59c53502fbd7c7638ce" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_91add9ba701de59c53502fbd7c7638ce = L.map(
+                "map_91add9ba701de59c53502fbd7c7638ce",
+                {
+                    center: [50.44144139351755, 2.7258010544252276],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 9,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_647e86b7b161d2c64400d75b337ffcae = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_647e86b7b161d2c64400d75b337ffcae.addTo(map_91add9ba701de59c53502fbd7c7638ce);
+        
+    
+            var tile_layer_9f63274a7ee4157d4dea1911eddb0fa4 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+            var mini_map_0ee9cdd35db1115bc1d8344bcf1a5ca0 = new L.Control.MiniMap(
+                tile_layer_9f63274a7ee4157d4dea1911eddb0fa4,
+                {"autoToggleDisplay": false, "centerFixed": false, "collapsedHeight": 25, "collapsedWidth": 25, "height": 150, "minimized": false, "position": "bottomright", "toggleDisplay": false, "width": 150, "zoomAnimation": false, "zoomLevelOffset": -5}
+            );
+            map_91add9ba701de59c53502fbd7c7638ce.addControl(mini_map_0ee9cdd35db1115bc1d8344bcf1a5ca0);
+        
+    
+            var marker_cluster_b95f500f76af385d1707cd43425488e2 = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var marker_16518c18dbad4d78668043d3aa527133 = L.marker(
+                [50.72629671, 2.538643015],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_c1649cf62d6656570c27d8e995a30f08 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_16518c18dbad4d78668043d3aa527133.setIcon(icon_c1649cf62d6656570c27d8e995a30f08);
+        
+    
+        var popup_be6381a5f6182c8bd8483808892ad45e = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_e95c96c715e510e4689bafc88264eacf = $(`<div id="html_e95c96c715e510e4689bafc88264eacf" style="width: 100.0%; height: 100.0%;">Nord - Hazebrouck: 17 occurrences, cod_commune: 59295</div>`)[0];
+                popup_be6381a5f6182c8bd8483808892ad45e.setContent(html_e95c96c715e510e4689bafc88264eacf);
+            
+        
+
+        marker_16518c18dbad4d78668043d3aa527133.bindPopup(popup_be6381a5f6182c8bd8483808892ad45e)
+        ;
+
+        
+    
+    
+            var marker_a99f975b517419a4c7b961380e14d74e = L.marker(
+                [50.63171832, 3.047832723],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_e95cd751f342d199815988999afffe43 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_a99f975b517419a4c7b961380e14d74e.setIcon(icon_e95cd751f342d199815988999afffe43);
+        
+    
+        var popup_6af44f6945be0b686deb6b1fda15f0d9 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_1650bfaf8997920de3c6e349836ae494 = $(`<div id="html_1650bfaf8997920de3c6e349836ae494" style="width: 100.0%; height: 100.0%;">Nord - Lille: 17 occurrences, cod_commune: 59350</div>`)[0];
+                popup_6af44f6945be0b686deb6b1fda15f0d9.setContent(html_1650bfaf8997920de3c6e349836ae494);
+            
+        
+
+        marker_a99f975b517419a4c7b961380e14d74e.bindPopup(popup_6af44f6945be0b686deb6b1fda15f0d9)
+        ;
+
+        
+    
+    
+            var marker_c01907cfe4a745fb1ef7f0331562eb2c = L.marker(
+                [50.72544189, 3.158827572],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_c33d4e4d4ee37a1b0e5117c2780ff0c8 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_c01907cfe4a745fb1ef7f0331562eb2c.setIcon(icon_c33d4e4d4ee37a1b0e5117c2780ff0c8);
+        
+    
+        var popup_55db7b74878c4db40f8b91e892ae60ed = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_266bc10604745d33eed45ec571f304ed = $(`<div id="html_266bc10604745d33eed45ec571f304ed" style="width: 100.0%; height: 100.0%;">Nord - Tourcoing: 15 occurrences, cod_commune: 59599</div>`)[0];
+                popup_55db7b74878c4db40f8b91e892ae60ed.setContent(html_266bc10604745d33eed45ec571f304ed);
+            
+        
+
+        marker_c01907cfe4a745fb1ef7f0331562eb2c.bindPopup(popup_55db7b74878c4db40f8b91e892ae60ed)
+        ;
+
+        
+    
+    
+            var marker_dcb2a65557f932ff3fba04eb707d1335 = L.marker(
+                [50.84168899, 2.418432928],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_9eca70462db79120af81c9c48ebecd51 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_dcb2a65557f932ff3fba04eb707d1335.setIcon(icon_9eca70462db79120af81c9c48ebecd51);
+        
+    
+        var popup_efff0f835f7410801923efaebdbaa694 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_f0b6a82d86d91f2d419bf161cd6a3b7e = $(`<div id="html_f0b6a82d86d91f2d419bf161cd6a3b7e" style="width: 100.0%; height: 100.0%;">Nord - Arnèke: 14 occurrences, cod_commune: 59018</div>`)[0];
+                popup_efff0f835f7410801923efaebdbaa694.setContent(html_f0b6a82d86d91f2d419bf161cd6a3b7e);
+            
+        
+
+        marker_dcb2a65557f932ff3fba04eb707d1335.bindPopup(popup_efff0f835f7410801923efaebdbaa694)
+        ;
+
+        
+    
+    
+            var marker_883f95cb4cd8b006a47af0e982fbd626 = L.marker(
+                [50.82143406, 2.585566425],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_891f310361804ef4000202140fdee05b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_883f95cb4cd8b006a47af0e982fbd626.setIcon(icon_891f310361804ef4000202140fdee05b);
+        
+    
+        var popup_a0c607d9af42a782d5a696a6e4b5ee16 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_be214dd3be866a2522bf1c9422742ae3 = $(`<div id="html_be214dd3be866a2522bf1c9422742ae3" style="width: 100.0%; height: 100.0%;">Nord - Steenvoorde: 14 occurrences, cod_commune: 59580</div>`)[0];
+                popup_a0c607d9af42a782d5a696a6e4b5ee16.setContent(html_be214dd3be866a2522bf1c9422742ae3);
+            
+        
+
+        marker_883f95cb4cd8b006a47af0e982fbd626.bindPopup(popup_a0c607d9af42a782d5a696a6e4b5ee16)
+        ;
+
+        
+    
+    
+            var marker_f76a59eff68f42e914c071b6e3cedef8 = L.marker(
+                [50.87785573, 2.478605171],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_130f1c5f0d0fb18a183d64610152a0ba = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_f76a59eff68f42e914c071b6e3cedef8.setIcon(icon_130f1c5f0d0fb18a183d64610152a0ba);
+        
+    
+        var popup_5d14661818e0c8f4ec56ac604ad3e70b = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_f6d714fad3b4811b7dfb2ba6fd26d7b7 = $(`<div id="html_f6d714fad3b4811b7dfb2ba6fd26d7b7" style="width: 100.0%; height: 100.0%;">Nord - Wormhout: 14 occurrences, cod_commune: 59663</div>`)[0];
+                popup_5d14661818e0c8f4ec56ac604ad3e70b.setContent(html_f6d714fad3b4811b7dfb2ba6fd26d7b7);
+            
+        
+
+        marker_f76a59eff68f42e914c071b6e3cedef8.bindPopup(popup_5d14661818e0c8f4ec56ac604ad3e70b)
+        ;
+
+        
+    
+    
+            var marker_1910d60fc7cde12f0cae4fd61a488040 = L.marker(
+                [50.64492939, 2.635826534],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_2e12f677c86757f0d03e9a5ca61405a4 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_1910d60fc7cde12f0cae4fd61a488040.setIcon(icon_2e12f677c86757f0d03e9a5ca61405a4);
+        
+    
+        var popup_8e62b6567f39237480da0f250a3cfa78 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ec7a44f2ac3b1dc4c05492ed2109b5c6 = $(`<div id="html_ec7a44f2ac3b1dc4c05492ed2109b5c6" style="width: 100.0%; height: 100.0%;">Nord - Merville: 13 occurrences, cod_commune: 59400</div>`)[0];
+                popup_8e62b6567f39237480da0f250a3cfa78.setContent(html_ec7a44f2ac3b1dc4c05492ed2109b5c6);
+            
+        
+
+        marker_1910d60fc7cde12f0cae4fd61a488040.bindPopup(popup_8e62b6567f39237480da0f250a3cfa78)
+        ;
+
+        
+    
+    
+            var marker_3343f9a351864e256d3df7bc07b2da47 = L.marker(
+                [50.63243724, 3.153525722],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_1d020738f182b50e700ec5cf76f7fbbb = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_3343f9a351864e256d3df7bc07b2da47.setIcon(icon_1d020738f182b50e700ec5cf76f7fbbb);
+        
+    
+        var popup_b9dd1796fe94f965013ef50bdfac3c55 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b5a770f90276fdcaaa3a3232016330af = $(`<div id="html_b5a770f90276fdcaaa3a3232016330af" style="width: 100.0%; height: 100.0%;">Nord - Villeneuve-d'Ascq: 13 occurrences, cod_commune: 59009</div>`)[0];
+                popup_b9dd1796fe94f965013ef50bdfac3c55.setContent(html_b5a770f90276fdcaaa3a3232016330af);
+            
+        
+
+        marker_3343f9a351864e256d3df7bc07b2da47.bindPopup(popup_b9dd1796fe94f965013ef50bdfac3c55)
+        ;
+
+        
+    
+    
+            var marker_b821716daecd4f1bf06a3ff1777acb20 = L.marker(
+                [50.91116793, 2.487358931],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_b4d051545c5464eca110839733b5f945 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_b821716daecd4f1bf06a3ff1777acb20.setIcon(icon_b4d051545c5464eca110839733b5f945);
+        
+    
+        var popup_a5c93433f2e2328e3657c4d875445383 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_e3b705a14ef0969f4f2b5e28ea3b7a8c = $(`<div id="html_e3b705a14ef0969f4f2b5e28ea3b7a8c" style="width: 100.0%; height: 100.0%;">Nord - Wylder: 13 occurrences, cod_commune: 59665</div>`)[0];
+                popup_a5c93433f2e2328e3657c4d875445383.setContent(html_e3b705a14ef0969f4f2b5e28ea3b7a8c);
+            
+        
+
+        marker_b821716daecd4f1bf06a3ff1777acb20.bindPopup(popup_a5c93433f2e2328e3657c4d875445383)
+        ;
+
+        
+    
+    
+            var marker_b3407db5340afab5ebbee27a8c06800f = L.marker(
+                [50.72742528, 2.737991208],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_94f4fca300d1b0c4b21998dc8bd8b4df = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_b3407db5340afab5ebbee27a8c06800f.setIcon(icon_94f4fca300d1b0c4b21998dc8bd8b4df);
+        
+    
+        var popup_4ba48c4451049a6da14599cffb031d19 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b542620e45b4a5e589ec2d704f1e6f7e = $(`<div id="html_b542620e45b4a5e589ec2d704f1e6f7e" style="width: 100.0%; height: 100.0%;">Nord - Bailleul: 12 occurrences, cod_commune: 59043</div>`)[0];
+                popup_4ba48c4451049a6da14599cffb031d19.setContent(html_b542620e45b4a5e589ec2d704f1e6f7e);
+            
+        
+
+        marker_b3407db5340afab5ebbee27a8c06800f.bindPopup(popup_4ba48c4451049a6da14599cffb031d19)
+        ;
+
+        
+    
+    
+            var marker_e5a235826904b1160c5f5c1a5313404e = L.marker(
+                [50.61713284, 1.617293389],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_f5c10f4d55ae34f43c2f36ae87c0f944 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_e5a235826904b1160c5f5c1a5313404e.setIcon(icon_f5c10f4d55ae34f43c2f36ae87c0f944);
+        
+    
+        var popup_d673091bab1b14fa8ad82e7eae78eb39 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_c920db7d17f13685d7f8ecee167726a6 = $(`<div id="html_c920db7d17f13685d7f8ecee167726a6" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Neufchâtel-Hardelot: 21 occurrences, cod_commune: 62604</div>`)[0];
+                popup_d673091bab1b14fa8ad82e7eae78eb39.setContent(html_c920db7d17f13685d7f8ecee167726a6);
+            
+        
+
+        marker_e5a235826904b1160c5f5c1a5313404e.bindPopup(popup_d673091bab1b14fa8ad82e7eae78eb39)
+        ;
+
+        
+    
+    
+            var marker_8cc7f52d0996f26412c2b93673d561c4 = L.marker(
+                [50.76797817, 2.263348815],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_298b33f159200be2f6a8456af260e62c = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_8cc7f52d0996f26412c2b93673d561c4.setIcon(icon_298b33f159200be2f6a8456af260e62c);
+        
+    
+        var popup_930845316dbf5e3e574e0e77b69f57a1 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b4ceb800fa38cb4b3ed8e44978be6f3b = $(`<div id="html_b4ceb800fa38cb4b3ed8e44978be6f3b" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Saint-Omer: 21 occurrences, cod_commune: 62765</div>`)[0];
+                popup_930845316dbf5e3e574e0e77b69f57a1.setContent(html_b4ceb800fa38cb4b3ed8e44978be6f3b);
+            
+        
+
+        marker_8cc7f52d0996f26412c2b93673d561c4.bindPopup(popup_930845316dbf5e3e574e0e77b69f57a1)
+        ;
+
+        
+    
+    
+            var marker_16b05e050ce61bab1da5037a620fe432 = L.marker(
+                [50.66548103, 1.601861705],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_3fbbc1123035588069f0838c723046ec = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_16b05e050ce61bab1da5037a620fe432.setIcon(icon_3fbbc1123035588069f0838c723046ec);
+        
+    
+        var popup_74417c931a14469ba1486c9e9c6a155b = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_69f048bd3d14fe5848df10bc89236e5d = $(`<div id="html_69f048bd3d14fe5848df10bc89236e5d" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Saint-Étienne-au-Mont: 21 occurrences, cod_commune: 62746</div>`)[0];
+                popup_74417c931a14469ba1486c9e9c6a155b.setContent(html_69f048bd3d14fe5848df10bc89236e5d);
+            
+        
+
+        marker_16b05e050ce61bab1da5037a620fe432.bindPopup(popup_74417c931a14469ba1486c9e9c6a155b)
+        ;
+
+        
+    
+    
+            var marker_8dd56ec0e8822624a1579cd69e77a94f = L.marker(
+                [50.7153325, 2.229131597],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_6c59d9820adbe86943ea756ed1d23151 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_8dd56ec0e8822624a1579cd69e77a94f.setIcon(icon_6c59d9820adbe86943ea756ed1d23151);
+        
+    
+        var popup_66e0df2d8642a463f5d824dd9c45ae37 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_d577b0eea3dcc51438dbe1cc9dcb338c = $(`<div id="html_d577b0eea3dcc51438dbe1cc9dcb338c" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Wizernes: 21 occurrences, cod_commune: 62902</div>`)[0];
+                popup_66e0df2d8642a463f5d824dd9c45ae37.setContent(html_d577b0eea3dcc51438dbe1cc9dcb338c);
+            
+        
+
+        marker_8dd56ec0e8822624a1579cd69e77a94f.bindPopup(popup_66e0df2d8642a463f5d824dd9c45ae37)
+        ;
+
+        
+    
+    
+            var marker_8d87b2c006687eae784ecb86dafad8ae = L.marker(
+                [50.4917667, 1.75510224],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_b44501643b93905fdc85bdba5c6821bd = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_8d87b2c006687eae784ecb86dafad8ae.setIcon(icon_b44501643b93905fdc85bdba5c6821bd);
+        
+    
+        var popup_f11ffce4411cb56d1e24cf255d1f9c62 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_fa3ac994ce0877ac5d8a304fbf6ea949 = $(`<div id="html_fa3ac994ce0877ac5d8a304fbf6ea949" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Attin: 19 occurrences, cod_commune: 62044</div>`)[0];
+                popup_f11ffce4411cb56d1e24cf255d1f9c62.setContent(html_fa3ac994ce0877ac5d8a304fbf6ea949);
+            
+        
+
+        marker_8d87b2c006687eae784ecb86dafad8ae.bindPopup(popup_f11ffce4411cb56d1e24cf255d1f9c62)
+        ;
+
+        
+    
+    
+            var marker_c1d7cf2bf38bc8070730a2ffb910453d = L.marker(
+                [50.44636132, 1.797235415],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_a6b8e962d87fe3e5bea0f253895322c9 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_c1d7cf2bf38bc8070730a2ffb910453d.setIcon(icon_a6b8e962d87fe3e5bea0f253895322c9);
+        
+    
+        var popup_67e74436628f3573bea356d6157dc103 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_f6dedb03100d8ca71b7e4b58b12d5c7f = $(`<div id="html_f6dedb03100d8ca71b7e4b58b12d5c7f" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Beaumerie-Saint-Martin: 18 occurrences, cod_commune: 62094</div>`)[0];
+                popup_67e74436628f3573bea356d6157dc103.setContent(html_f6dedb03100d8ca71b7e4b58b12d5c7f);
+            
+        
+
+        marker_c1d7cf2bf38bc8070730a2ffb910453d.bindPopup(popup_67e74436628f3573bea356d6157dc103)
+        ;
+
+        
+    
+    
+            var marker_ac3d8ad119971274763ee2f348169258 = L.marker(
+                [50.56177723, 1.689491614],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_a4ae3df6d22a221dda529552992b8ad2 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_ac3d8ad119971274763ee2f348169258.setIcon(icon_a4ae3df6d22a221dda529552992b8ad2);
+        
+    
+        var popup_09302bf8826f768f947a0792e8ca70cd = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_68b8f095c08d3dbb44bb1cbc964072da = $(`<div id="html_68b8f095c08d3dbb44bb1cbc964072da" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Frencq: 18 occurrences, cod_commune: 62354</div>`)[0];
+                popup_09302bf8826f768f947a0792e8ca70cd.setContent(html_68b8f095c08d3dbb44bb1cbc964072da);
+            
+        
+
+        marker_ac3d8ad119971274763ee2f348169258.bindPopup(popup_09302bf8826f768f947a0792e8ca70cd)
+        ;
+
+        
+    
+    
+            var marker_8bd78c09a90f8f3715023c9157a6f999 = L.marker(
+                [50.6822963, 1.656343564],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_2eca57aa8b001d29143c1e20f28ef99b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_8bd78c09a90f8f3715023c9157a6f999.setIcon(icon_2eca57aa8b001d29143c1e20f28ef99b);
+        
+    
+        var popup_dec7f5e6bec37c33159b8b062efc119d = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_465df1c0307456e7c0c31e2809736541 = $(`<div id="html_465df1c0307456e7c0c31e2809736541" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Isques: 18 occurrences, cod_commune: 62474</div>`)[0];
+                popup_dec7f5e6bec37c33159b8b062efc119d.setContent(html_465df1c0307456e7c0c31e2809736541);
+            
+        
+
+        marker_8bd78c09a90f8f3715023c9157a6f999.bindPopup(popup_dec7f5e6bec37c33159b8b062efc119d)
+        ;
+
+        
+    
+    
+            var marker_0777c83547d3ecb23b0931f81872afe5 = L.marker(
+                [50.83553455, 2.080175208],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_4f00e4b0859314cc4fc338408cceb455 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_0777c83547d3ecb23b0931f81872afe5.setIcon(icon_4f00e4b0859314cc4fc338408cceb455);
+        
+    
+        var popup_405b8e6a9a7ad60a97e0a8bba12ba897 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_d8ab4b229dac9590b3f2c9a6d8ae47e8 = $(`<div id="html_d8ab4b229dac9590b3f2c9a6d8ae47e8" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Recques-sur-Hem: 18 occurrences, cod_commune: 62699</div>`)[0];
+                popup_405b8e6a9a7ad60a97e0a8bba12ba897.setContent(html_d8ab4b229dac9590b3f2c9a6d8ae47e8);
+            
+        
+
+        marker_0777c83547d3ecb23b0931f81872afe5.bindPopup(popup_405b8e6a9a7ad60a97e0a8bba12ba897)
+        ;
+
+        
+    
+    
+            var marker_880669936fa2413705e6fb3c9a13c02a = L.marker(
+                [50.76915576, 2.342739287],
+                {}
+            ).addTo(marker_cluster_b95f500f76af385d1707cd43425488e2);
+        
+    
+            var icon_ea1bb44cdba29fe2c34f68b290ff834f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_880669936fa2413705e6fb3c9a13c02a.setIcon(icon_ea1bb44cdba29fe2c34f68b290ff834f);
+        
+    
+        var popup_713d03fdd7870e5a86b7657166f417ec = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_92b2f57d352bfd8980e26cb80448c617 = $(`<div id="html_92b2f57d352bfd8980e26cb80448c617" style="width: 100.0%; height: 100.0%;">Pas_De_Calais - Clairmarais: 17 occurrences, cod_commune: 62225</div>`)[0];
+                popup_713d03fdd7870e5a86b7657166f417ec.setContent(html_92b2f57d352bfd8980e26cb80448c617);
+            
+        
+
+        marker_880669936fa2413705e6fb3c9a13c02a.bindPopup(popup_713d03fdd7870e5a86b7657166f417ec)
+        ;
+
+        
+    
+    
+            marker_cluster_b95f500f76af385d1707cd43425488e2.addTo(map_91add9ba701de59c53502fbd7c7638ce);
+        
+</script>
+</html>
