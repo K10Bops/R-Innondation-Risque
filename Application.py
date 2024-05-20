@@ -152,7 +152,7 @@ def main():
     
         # Display the map or a message if there are NaNs or no data
         if folium_map:
-            st.components.v1.html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
+            st.components.html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
         else:
             st.write("Sorry either the values are Null, or this data does not exist.")
 
@@ -183,7 +183,7 @@ def main():
                     with open(file_path, 'r', encoding='utf-8') as f:
                         html_content = f.read()
                     # Display the HTML content
-                    st.components.v1.html(html_content, width=1200, height=500, scrolling=True)
+                    st.components.html(html_content, width=1200, height=500, scrolling=True)
                 except FileNotFoundError:
                     # Handle the case when the file is not found
                     st.error(f"Le fichier de visualisation {vis} n'a pas été trouvé.")
