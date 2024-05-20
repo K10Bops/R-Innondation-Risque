@@ -4,7 +4,7 @@ osmnx
 matplotlib
 streamlit-image-select
 geopandas
-os
+
 urllib.parse
 folium
 folium.plugins
