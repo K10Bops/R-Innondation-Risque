@@ -4,16 +4,12 @@ import pandas as pd
 import streamlit as st
 import os
 
-
-
-
 # Set page config
 st.set_page_config(
     page_title="Data App",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-
 
 # Define a function to set the app's theme and aesthetics
 def set_theme():
@@ -51,8 +47,8 @@ def set_theme():
     )
 
 # Load the geo_data DataFrame from the CSV file
-file_path = r"C:\K10\IESEG\Studies\2024\Hack\April_May\m_data\geo_data.csv"
-geo_data = pd.read_csv(file_path)
+geo_data_file_path = os.path.join('tables', 'geo_data.csv')
+geo_data = pd.read_csv(geo_data_file_path)
 
 # Define the main function
 def main():
@@ -176,7 +172,7 @@ def main():
             }    
         
             # Define the directory containing the visualizations
-            dir_path = r'C:\K10\IESEG\Studies\2024\Hack\April_May\app credit agricole'
+            dir_path = '.'
         
             # Loop through each visualization file and display it
             for vis in visualization_files.get(disaster, []):
@@ -199,7 +195,7 @@ def main():
         
         # Load and display the table below all the visualizations
         st.header("Cout moyen des sinistres des principales régions inondées")
-        table_path = os.path.join(r'C:\K10\IESEG\Studies\2024\Hack\April_May\app credit agricole', 'agg_filtered_df_grouped2.csv')
+        table_path = os.path.join('tables', 'agg_filtered_df_grouped2.csv')
         df_table = pd.read_csv(table_path)
         st.write(df_table)
         
@@ -212,4 +208,3 @@ def main():
         
 if __name__ == "__main__":
     main()
-
