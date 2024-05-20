@@ -3,7 +3,7 @@ from folium.plugins import MarkerCluster
 import pandas as pd
 import streamlit as st
 import os
-import streamlit.components.v1 as components
+from streamlit.components.v1 import html
 
 # Set page config
 st.set_page_config(
@@ -153,7 +153,7 @@ def main():
     
         # Display the map or a message if there are NaNs or no data
         if folium_map:
-            st.components.html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
+            html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
         else:
             st.write("Sorry either the values are Null, or this data does not exist.")
 
@@ -184,7 +184,7 @@ def main():
                     with open(file_path, 'r', encoding='utf-8') as f:
                         html_content = f.read()
                     # Display the HTML content
-                    st.components.html(html_content, width=1200, height=500, scrolling=True)
+                    html(html_content, width=1200, height=500, scrolling=True)
                 except FileNotFoundError:
                     # Handle the case when the file is not found
                     st.error(f"Le fichier de visualisation {vis} n'a pas été trouvé.")
