@@ -3,6 +3,7 @@ from folium.plugins import MarkerCluster
 import pandas as pd
 import streamlit as st
 import os
+import streamlit.components.v1 as components
 
 # Set page config
 st.set_page_config(
