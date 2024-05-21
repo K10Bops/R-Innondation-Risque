@@ -72,12 +72,16 @@ def main():
             years (list): The years for which to create the map.
             departments (list): The departments for which to create the map.
             insee_codes (list): The insee codes for the communes.
+            selected_risk_scores (list): The risk scores for which to create the map.
     
             Returns:
             folium.Map or None: A Folium map with markers for the selected years, departments, and insee_codes, or None if data is invalid.
             """
-            # Filter the DataFrame for the selected years, departments, and insee_codes
-            selected_data = geo_data[(geo_data['year'].isin(years)) & (geo_data['department'].isin(departments))]
+            # Filter the DataFrame for the selected years, departments, insee_codes, and risk_scores
+            selected_data = geo_data[(geo_data['year'].isin(years)) & 
+                                     (geo_data['department'].isin(departments)) & 
+                                     (geo_data['risk_score'].isin(selected_risk_scores)) & 
+                                     (geo_data['insee'].isin(insee_codes))]
     
             # Ensure the filtered data contains the necessary columns and no NaNs
             if selected_data.empty or selected_data[['latitude', 'longitude']].isnull().any().any():
@@ -146,14 +150,32 @@ def main():
         # Display a message if no communes are selected (default state)
         if not selected_communes:
             st.sidebar.write("All Communes chosen by default")
+
+         # Risk score checkboxes
+        st.sidebar.subheader("Select Risk Scores")
+        risk_score_options = sorted(geo_data['risk_score'].unique().astype(float))
+        selected_risk_scores = []
+        for score in risk_score_options:
+            if st.sidebar.checkbox(f"Risk Score: {score}", value=True):
+                selected_risk_scores.append(score)
             
     
+        # Ensure all communes are selected by default if none are selected
+        if not selected_communes:
+            selected_communes = filtered_insee_options
+    
         # Create the map with selected filters
-        folium_map = create_risk_map_for_year_department_insee(filtered_geo_data, selected_years, selected_departments, selected_communes)
+        filtered_geo_data = geo_data[
+            (geo_data['insee'].isin(selected_communes)) & 
+            (geo_data['risk_score'].isin(selected_risk_scores))
+        ]
+    
+        # Create the map with selected filters
+        folium_map = create_risk_map_for_year_department_insee(filtered_geo_data, selected_years, selected_departments, selected_communes, selected_risk_scores)
     
         # Display the map or a message if there are NaNs or no data
         if folium_map:
-            html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
+            st.components.v1.html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
         else:
             st.write("Sorry either the values are Null, or this data does not exist.")
 
