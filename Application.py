@@ -63,7 +63,7 @@ def main():
         st.header(f"Cartes de Inondation")
     
         # Function to create a risk map for selected years, departments, and insee_codes
-        def create_risk_map_for_year_department_insee(geo_data, years, departments, insee_codes):
+        def create_risk_map_for_year_department_insee(geo_data, years, departments, insee_codes, selected_risk_scores):
             """
             Create a risk map for selected years, departments, and insee_codes.
     
