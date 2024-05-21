@@ -149,7 +149,7 @@ def main():
             
         # Display a message if no communes are selected (default state)
         if not selected_communes:
-            st.sidebar.write("All Communes chosen by default")
+            st.sidebar.caption("All Communes chosen by default")
 
          # Risk score checkboxes
         st.sidebar.subheader("Select Risk Scores")
@@ -177,7 +177,7 @@ def main():
         if folium_map:
             st.components.v1.html(folium_map._repr_html_(), width=1000, height=800, scrolling=True)
         else:
-            st.write("Sorry either the values are Null, or this data does not exist.")
+            st.caption("Sorry either the values are Null, or this data does not exist.")
 
 
          
