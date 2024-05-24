@@ -194,7 +194,7 @@ def main():
         
             # Risk score checkboxes
             st.sidebar.subheader("Select Risk Scores")
-            risk_score_labels = {0: "Aucun", 1: "Faible", 2: "Moyen", 3: "Élevé"}
+            risk_score_labels = {0: "Absent", 1: "Faible", 2: "Moyen", 3: "Élevé"}
             selected_risk_scores = []
             for score, label in risk_score_labels.items():
                 if st.sidebar.checkbox(f"Risk Score: {label}", value=True):
