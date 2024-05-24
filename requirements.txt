@@ -6,4 +6,6 @@ streamlit-image-select
 geopandas
 folium
 streamlit
+plotly
+time
 
