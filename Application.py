@@ -297,18 +297,6 @@ def main():
         display_visualization('inondation')
         
         
-        # Load and display the table below all the visualizations
-        st.header("Cout moyen des sinistres des principales régions inondées")
-        table_path = os.path.join('tables', 'agg_filtered_df_grouped2.csv')
-        df_table = pd.read_csv(table_path)
-        st.write(df_table)
-        
-        
-        
-        
-        
-        
-        
         
 if __name__ == "__main__":
     main()
