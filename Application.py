@@ -242,15 +242,40 @@ def main():
             st.plotly_chart(fig_nord, use_container_width=True, height=600)
         with col2:
             st.plotly_chart(fig_pas_de_calais, use_container_width=True, height=600)
-        # Load and display the HTML file for Nord
-        with open("Risk_Score_Intensity_Nord.html", 'rb') as file:
-            nord_html = file.read().decode("utf-8")  # Decode using utf-8 encoding
-        st.components.v1.html(nord_html, width=1000, height=600, scrolling=True)
-            
-            # Load and display the HTML file for Pas-de-Calais
-        with open("Risk_Score_Intensity_Pas_De_Calais.html", 'rb') as file:
-            pas_de_calais_html = file.read().decode("utf-8")  # Decode using utf-8 encoding
-        st.components.v1.html(pas_de_calais_html, width=1000, height=600, scrolling=True)
+        
+        # Generate and display heatmaps
+        top_communes_Nord = geo_data[geo_data['department'] == 'Nord'].nlargest(10, 'risk_score')
+        top_communes_Pas_De_Calais = geo_data[geo_data['department'] == 'Pas_De_Calais'].nlargest(10, 'risk_score')
+
+        top_communes_Nord_mean = top_communes_Nord.groupby('nom_commune')['risk_score'].mean()
+        top_communes_Pas_De_Calais_mean = top_communes_Pas_De_Calais.groupby('nom_commune')['risk_score'].mean()
+
+        top_communes_Nord_data = geo_data[geo_data['nom_commune'].isin(top_communes_Nord_mean.index)]
+        top_communes_Pas_De_Calais_data = geo_data[geo_data['nom_commune'].isin(top_communes_Pas_De_Calais_mean.index)]
+
+        heatmap_data_Nord = top_communes_Nord_data.pivot_table(values='risk_score', index='nom_commune', columns='year', fill_value=0)
+        heatmap_data_Pas_De_Calais = top_communes_Pas_De_Calais_data.pivot_table(values='risk_score', index='nom_commune', columns='year', fill_value=0)
+
+        colorscale = [
+            [0, '#e0f3f8'],
+            [1.0 / 1000, '#abd9e9'],
+            [1.0 / 10, '#4dac26'],
+            [1.0, '#08589e']
+        ]
+
+        fig_Nord = px.imshow(heatmap_data_Nord, aspect='auto',
+                             title='Risk Score Intensity Over Time for Top Communes (Department Nord)',
+                             labels={'color': 'risk_score'},
+                             color_continuous_scale=colorscale)
+
+        fig_Pas_De_Calais = px.imshow(heatmap_data_Pas_De_Calais, aspect='auto',
+                                      title='Risk Score Intensity Over Time for Top Communes (Department Pas-de-Calais)',
+                                      labels={'color': 'risk_score'},
+                                      color_continuous_scale=colorscale)
+
+        # Display heatmaps in Streamlit
+        st.plotly_chart(fig_Nord, use_container_width=True, height=600)
+        st.plotly_chart(fig_Pas_De_Calais, use_container_width=True, height=600)
         
         
         st.button("Reset Page")
