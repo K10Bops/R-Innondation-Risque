@@ -11,6 +11,8 @@ from folium.plugins import MarkerCluster
 import time
 
 
+# Get the directory of the current script
+current_dir = os.path.dirname(__file__)
 
 
 
