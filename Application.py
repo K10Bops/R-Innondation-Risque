@@ -9,6 +9,14 @@ import datetime
 import plotly.express as px
 from folium.plugins import MarkerCluster
 import time
+import geopandas as gpd
+
+from pandas.api.types import (
+    is_categorical_dtype,
+    is_datetime64_any_dtype,
+    is_numeric_dtype,
+    is_object_dtype,
+)
 
 
 # Get the directory of the current script
