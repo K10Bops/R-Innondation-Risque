@@ -122,29 +122,42 @@ def main():
         
         # Function to create a risk map for selected year, departments, and insee_codes
         def create_risk_map_for_year_department_insee(geo_data, year, departments, insee_codes, selected_risk_scores):
+            """
+            Create a risk map for selected year, departments, and insee_codes.
+        
+            Parameters:
+            geo_data (DataFrame): DataFrame containing the geo data including latitude, longitude, year, department, insee, and geometry.
+            year (int): The year for which to create the map.
+            departments (list): The departments for which to create the map.
+            insee_codes (list): The insee codes for the communes.
+            selected_risk_scores (list): The risk scores for which to create the map.
+        
+            Returns:
+            folium.Map or None: A Folium map with markers for the selected year, departments, and insee_codes, or None if data is invalid.
+            """
             # Create a new column 'id_nom' by merging 'insee' and 'nom_commune'
             geo_data['id_nom'] = geo_data['insee'].astype(str) + ' : ' + geo_data['nom_commune']
-        
+            
             # Filter the DataFrame for the selected year, departments, risk_scores, and id_nom
             selected_data = geo_data[(geo_data['year'] == year) & 
                                      (geo_data['department'].isin(departments)) & 
                                      (geo_data['risk_score'].isin(selected_risk_scores)) &
                                      (geo_data['id_nom'].isin(insee_codes))]
-        
+            
             # Ensure the filtered data contains the necessary columns and no NaNs
             if selected_data.empty or selected_data[['latitude', 'longitude']].isnull().any().any():
                 return None
-        
+            
             # Calculate the mean latitude and longitude for the selected insee_codes
             mean_lat = selected_data['latitude'].mean()
             mean_lon = selected_data['longitude'].mean()
-        
+            
             # Initialize a map centered around the mean location
             m1 = folium.Map(location=[mean_lat, mean_lon], zoom_start=10)
-        
+            
             # Use MarkerCluster to cluster the markers for better visualization
             marker_cluster = MarkerCluster().add_to(m1)
-        
+            
             # Add markers to the map with tooltips and customized popups
             for idx, row in selected_data.iterrows():
                 # Calculate the sum of 'num_cours_deau' and 'num_plan_deau'
@@ -158,7 +171,19 @@ def main():
                     popup=folium.Popup(popup_content, max_width=300),
                     tooltip=row['id_nom']  # Keep the tooltip as it was before
                 ).add_to(marker_cluster)
-        
+
+
+            
+            # Sample GeoDataFrame with mixed geometry types
+            gdf = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+            
+            # Filter the GeoDataFrame to include only France
+            france_geometry = gdf[(gdf['name'] == 'France')]
+            
+            # Add the geometry for France to the map
+            for idx, row in france_geometry.iterrows():
+                folium.GeoJson(row['geometry']).add_to(m1)
+            
             return m1
         
         # Function to create a filtered plot
