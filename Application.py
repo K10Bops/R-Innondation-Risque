@@ -39,8 +39,16 @@ pessimist_scenario_df = dataframes[2]
 geo_data_file_path = os.path.join('tables', 'geo_data.csv')
 geo_data = pd.read_csv(geo_data_file_path)
 
+dvf_path = os.path.join('tables', 'geo_data.csv')
+dvf_yearly = pd.read_csv(dvf_path)
+
+basetable_path = os.path.join('tables', 'geo_data.csv')
+basetable = pd.read_csv(basetable_path)
+# =============================================================================
 
 
+# DATA Mutation
+# =============================================================================
 # Merge moderate_scenario_df with geo_data on 'insee'
 moderate_scenario_df = pd.merge(moderate_scenario_df, geo_data[['insee', 'nom_commune']], on='insee', how='left')
 moderate_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
@@ -52,24 +60,13 @@ optimist_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
 # Merge pessimist_scenario_df with geo_data on 'insee'
 pessimist_scenario_df = pd.merge(pessimist_scenario_df, geo_data[['insee', 'nom_commune']], on='insee', how='left')
 pessimist_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
+# Merge moderate_scenario_df with geo_data on 'insee'
+basetable = pd.merge(basetable, geo_data[['insee', 'nom_commune']], on='insee', how='left')
 
 
-
-
-
-
-
-
-
-
-
-# Set page config
-st.set_page_config(
-    page_title="Data App",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
-
+# =============================================================================
+# FUNCTIONS
+# =============================================================================
 # Define a function to set the app's theme and aesthetics
 def set_theme():
     # Define custom colors
@@ -104,14 +101,21 @@ def set_theme():
         """,
         unsafe_allow_html=True
     )
-
+# Set page config
+st.set_page_config(
+    page_title="Data App",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+# =============================================================================
 # Define the main function
 def main():
     set_theme()  # Apply the custom theme
 
     # Create tabs for navigation
     tab1, tab2, tab3, tab4 = st.tabs(["Cartes", "Visualisations", "Scenario", "Demandes de valeurs"])
-
+##############################################################################        
+##############################################################################   
     # Tab 1: Maps
     with tab1:
         st.header(f"Cartes de Inondation")
