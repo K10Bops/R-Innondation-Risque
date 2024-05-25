@@ -171,8 +171,11 @@ def main():
                 # Calculate the sum of 'num_cours_deau' and 'num_plan_deau'
                 sum_value = row['num_cours_deau'] + row['num_plan_deau']
             
+                # Get the corresponding last_occurrence for the commune
+                last_occurrence = selected_data[selected_data['id_nom'] == row['id_nom']]['last_occurrence'].values[0]
+            
                 # Create the popup content with commune name and the sum of 'num_cours_deau' and 'num_plan_deau'
-                popup_content = f"<strong>{row['nom_commune']}</strong><br>Sum of Water Sources: {sum_value}<br>Last Occurrence: {geo_data.last_occurrence}"
+                popup_content = f"<strong>{row['nom_commune']}</strong><br>Sum of Water Sources: {sum_value}<br>Last Occurrence: {last_occurrence}"
             
                 folium.Marker(
                     location=[row['latitude'], row['longitude']],
