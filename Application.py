@@ -11,6 +11,43 @@ from folium.plugins import MarkerCluster
 import time
 
 
+
+
+
+
+# File paths relative to the current script
+file_names = [
+    'test_set_modarate_scenario.csv',
+    'test_set_optimist_scenario.csv',
+    'test_set_pessimist_scenario.csv'
+]
+
+# Construct the full file paths
+file_paths = [os.path.join(current_dir, 'scenario', file_name) for file_name in file_names]
+
+# Reading CSV files
+dataframes = [pd.read_csv(file) for file in file_paths]
+
+# Accessing individual dataframes
+moderate_scenario_df = dataframes[0]
+optimist_scenario_df = dataframes[1]
+pessimist_scenario_df = dataframes[2]
+
+# Load the geo_data DataFrame from the CSV file
+geo_data_file_path = os.path.join('tables', 'geo_data.csv')
+geo_data = pd.read_csv(geo_data_file_path)
+
+
+
+
+
+
+
+
+
+
+
+
 # Set page config
 st.set_page_config(
     page_title="Data App",
@@ -52,10 +89,6 @@ def set_theme():
         """,
         unsafe_allow_html=True
     )
-
-# Load the geo_data DataFrame from the CSV file
-geo_data_file_path = os.path.join('tables', 'geo_data.csv')
-geo_data = pd.read_csv(geo_data_file_path)
 
 # Define the main function
 def main():
@@ -310,6 +343,76 @@ def main():
         
         # Call the function to display visualizations
         display_visualization('inondation')
+
+
+##################################################        
+##################################################        
+     # Tab 2: Scenarios
+
+    with tab3:
+        st.subheader("Analyze Different Scenarios")
+
+        # Default selected dataframe
+        selected_df = st.selectbox("Select DataFrame", ["Moderate", "Optimist", "Pessimist"], index=1)
+        
+        # Get the selected dataframe and set the default descriptive text
+        if selected_df == "Moderate":
+            df = moderate_scenario_df
+            default_text = """
+            - **Moderate Scenario Description**:
+              - Decrease risk score by 1 level except for 0 for 2024
+              - Increase the average claims expenditure by 20% for 2024
+            """
+        elif selected_df == "Optimist":
+            df = optimist_scenario_df
+            default_text = """
+            - **Optimistic Scenario Description**:
+              - Decrease risk score by 1 level except for 0 for 2024
+              - Reduce the average claims expenditure by 20% for 2024
+            """
+        else:
+            df = pessimist_scenario_df
+            default_text = """
+            - **Pessimistic Scenario Description**:
+              - Keep the same risk score as 2023
+              - Keep the same average claims expenditure for 2023
+            """
+        
+        # Display the default descriptive text
+        st.markdown(default_text)
+        
+        # Create filters
+        with st.container():
+            # Filter by 'insee'
+            selected_id_nom = st.selectbox("Select an 'id_nom'", df["id_nom"].unique())
+             
+            # Filter the DataFrame based on the selected 'id_nom' and the year 2024
+            selected_data = df[(df['id_nom'] == selected_id_nom) & (df['year'] == 2024)]
+            
+            # Check if the filtered data is not empty
+            if not selected_data.empty:
+                # Extract the relevant values
+                risk_score = selected_data['risk_score'].values[0]
+                estimated_expenditure = selected_data['Estimated Expenditure (€k)'].values[0]
+                property_depreciation = selected_data['depreciation'].values[0]
+            
+                # Generate the dynamic text with bold fonts
+                dynamic_text = f"""
+                The **2024** forecast for ID NOM **{selected_id_nom}** reveals a **risk score** of **{risk_score}**, indicating **{'no expected flood risk' if risk_score == 0.0 else 'a potential flood risk'}**. The budgeted **Estimated Expenditure** of **€{estimated_expenditure:,.2f}k** suggests a strategic allocation towards flood management. Despite the **{'low risk assessment' if risk_score == 0.0 else 'acknowledged risk'}**, there's a significant depreciation in property values, amounting to **€{property_depreciation:,.2f}k**. This depreciation could be influenced by broader economic trends or the anticipation of environmental challenges, reflecting a market that values foresight and risk management.
+                """
+            
+                # Display the dynamic text
+                st.markdown(dynamic_text)
+            else:
+                st.write("No data available for the selected ID NOM and year 2024.")
+
+            
+                st.subheader(f"Selected DataFrame: {selected_df}")
+                st.write(df.head())
+
+
+
+
         
         
         
