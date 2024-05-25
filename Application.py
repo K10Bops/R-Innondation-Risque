@@ -164,7 +164,7 @@ def main():
                 sum_value = row['num_cours_deau'] + row['num_plan_deau']
             
                 # Create the popup content with commune name and the sum of 'num_cours_deau' and 'num_plan_deau'
-                popup_content = f"<strong>{row['nom_commune']}</strong><br>Sum of Water Sources: {sum_value}"
+                popup_content = f"<strong>{row['nom_commune']}</strong><br>Sum of Water Sources: {sum_value}<br>Last Occurrence: {geo_data.last_occurrence}"
             
                 folium.Marker(
                     location=[row['latitude'], row['longitude']],
