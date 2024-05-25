@@ -106,7 +106,7 @@ def main():
         
             return m1
         
-         Function to create a filtered plot
+         #Function to create a filtered plot
         def create_filtered_plot(geo_data, department, selected_year_range):
             # Filter data for the specified department
             department_data = geo_data[geo_data['department'] == department]
