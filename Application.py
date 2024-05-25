@@ -110,7 +110,7 @@ def main():
     set_theme()  # Apply the custom theme
 
     # Create tabs for navigation
-    tab1, tab2, tab3 = st.tabs(["Cartes", "Visualisations", "Commune_Sélectionner"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Cartes", "Visualisations", "Scenario", "Demandes de valeurs"])
 
     # Tab 1: Maps
     with tab1:
@@ -425,6 +425,128 @@ def main():
                 st.subheader(f"Selected DataFrame: {selected_df}")
                 st.write(df.head())
 
+        st.divider()
+        
+        st.subheader("Historical Depreciation information")
+            
+        col1, col2 = st.columns([3, 2])
+        
+        with col1:
+            # Create pivot table
+            pivot_df = basetable.pivot_table(index='year', columns='nom_commune', values='depreciation')
+            # Plotting for Depreciation Since Last Year Over Time by INSEE Code
+            fig1 = go.Figure()
+        
+            for column in pivot_df.columns:
+                fig1.add_trace(go.Scatter(
+                    x=pivot_df.index,
+                    y=pivot_df[column],
+                    mode='lines+markers',
+                    name=f'Nom: {column}'
+                ))
+        
+            fig1.update_layout(
+                title='Depreciation Since Last Year Over Time by INSEE Code',
+                xaxis_title='Year',
+                yaxis_title='Depreciation Since Last Year',
+                legend_title='INSEE Nom',
+                template='plotly_white'
+            )
+        
+            st.plotly_chart(fig1)
+        with col2:
+        
+            # Calculating the average depreciation for each year
+            average_depreciation = basetable.groupby('year')['depreciation'].mean()
+        
+            # Plotting for Average Depreciation Since Last Year Over Time
+            fig2 = go.Figure()
+        
+            fig2.add_trace(go.Scatter(
+                x=average_depreciation.index,
+                y=average_depreciation.values,
+                mode='lines+markers',
+                name='Average Depreciation',
+                line=dict(color='blue', width=2),
+                marker=dict(symbol='circle', size=8, color='blue'),
+            ))
+        
+            fig2.update_layout(
+                title='Average Depreciation Since Last Year Over Time',
+                xaxis_title='Year',
+                yaxis_title='Average Depreciation Since Last Year',
+                template='plotly_white'
+            )
+        
+            st.plotly_chart(fig2)
+
+
+
+
+    
+    # Tab 4: Visualisations   
+    with tab4:
+        st.header("2018-2023 valeurs")
+        
+        # Grouped data by 'risk_score'
+        grouped_data = dvf_yearly.groupby('risk_score')
+    
+        # Plotting for Change in Average Prixm2Moyen by Risk Score Over the Years
+        fig1 = go.Figure()
+    
+        # Iterate over each group
+        for name, group in grouped_data:
+            fig1.add_trace(go.Scatter(
+                x=group['year'],
+                y=group['Prixm2Moyen'],
+                mode='lines+markers',
+                name=f'Risk Score {name}'
+            ))
+    
+        fig1.update_layout(
+            title='Change in Average Prixm2Moyen by Risk Score Over the Years',
+            xaxis_title='Year',
+            yaxis_title='Average Prixm2Moyen',
+            template='plotly_white'
+        )
+    
+        st.plotly_chart(fig1)
+    
+        # Compute the average Prixm2Moyen for risk scores other than 0
+        average_other_risk = dvf_yearly[dvf_yearly['risk_score'] != 0].groupby('year')['Prixm2Moyen'].mean()
+    
+        # Grouped data by 'risk_score' including only risk score 0
+        average_zero_risk = dvf_yearly[dvf_yearly['risk_score'] == 0].groupby('year')['Prixm2Moyen'].mean()
+    
+        # Plotting for Average Prixm2Moyen Over the Years for Different Risk Scores
+        fig2 = go.Figure()
+    
+        # Plotting line for risk score = 0
+        fig2.add_trace(go.Scatter(
+            x=average_zero_risk.index,
+            y=average_zero_risk.values,
+            mode='lines',
+            name='Average for risk score = 0',
+            line=dict(color='blue')
+        ))
+    
+        # Plotting line for other risk scores
+        fig2.add_trace(go.Scatter(
+            x=average_other_risk.index,
+            y=average_other_risk.values,
+            mode='lines',
+            name='Average for other risk scores',
+            line=dict(color='red')
+        ))
+    
+        fig2.update_layout(
+            title='Average Prixm2Moyen Over the Years for Different Risk Scores',
+            xaxis_title='Year',
+            yaxis_title='Average Prixm2Moyen',
+            template='plotly_white'
+        )
+    
+        st.plotly_chart(fig2)
 
 
 
