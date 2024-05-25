@@ -54,7 +54,7 @@ def set_theme():
     )
 
 # Load the geo_data DataFrame from the CSV file
-geo_data_file_path = r"C:\K10\IESEG\Studies\2024\Hack\April_May\Github\geo_data.csv"
+geo_data_file_path = os.path.join('tables', 'geo_data.csv')
 geo_data = pd.read_csv(geo_data_file_path)
 
 # Define the main function
@@ -280,7 +280,7 @@ def main():
          
 ##################################################        
 ##################################################        
-    # Tab 2: Visualisations
+     # Tab 2: Visualisations
     with tab2:
         st.header(f"Visualisations de Inondation")
         
@@ -288,7 +288,7 @@ def main():
         def display_visualization(disaster):
             # Maps the disaster type to its corresponding visualization files
             visualization_files = {
-               'inondation': ['heatmap_inondation','monthly_distribution_2018_2023', 'top_10_nord','top_10_Pas_de_calais', 'top10_inondations_par_departement_map']
+               'inondation': ['heatmap_inondation','monthly_distribution_2018_2013', 'top_10_nord','top_10_Pas_de_calais', 'top10_inondations_par_departement_map']
             }    
         
             # Define the directory containing the visualizations
@@ -307,7 +307,6 @@ def main():
                 except FileNotFoundError:
                     # Handle the case when the file is not found
                     st.error(f"Le fichier de visualisation {vis} n'a pas été trouvé.")
-
         
         # Call the function to display visualizations
         display_visualization('inondation')
