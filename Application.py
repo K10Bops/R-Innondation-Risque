@@ -67,27 +67,27 @@ def main():
     # Tab 1: Maps
     with tab1:
         st.header(f"Cartes de Inondation")
-           
-        # Function to create a risk map for selected years, departments, and insee_codes
-        def create_risk_map_for_year_department_insee(geo_data, years, departments, insee_codes, selected_risk_scores):
+        
+        # Function to create a risk map for selected year, departments, and insee_codes
+        def create_risk_map_for_year_department_insee(geo_data, year, departments, insee_codes, selected_risk_scores):
             """
-            Create a risk map for selected years, departments, and insee_codes.
+            Create a risk map for selected year, departments, and insee_codes.
         
             Parameters:
             geo_data (DataFrame): DataFrame containing the geo data including latitude, longitude, year, department, and insee.
-            years (list): The years for which to create the map.
+            year (int): The year for which to create the map.
             departments (list): The departments for which to create the map.
             insee_codes (list): The insee codes for the communes.
             selected_risk_scores (list): The risk scores for which to create the map.
         
             Returns:
-            folium.Map or None: A Folium map with markers for the selected years, departments, and insee_codes, or None if data is invalid.
+            folium.Map or None: A Folium map with markers for the selected year, departments, and insee_codes, or None if data is invalid.
             """
             # Create a new column 'id_nom' by merging 'insee' and 'nom_commune'
             geo_data['id_nom'] = geo_data['insee'].astype(str) + ' : ' + geo_data['nom_commune']
         
-            # Filter the DataFrame for the selected years, departments, risk_scores, and id_nom
-            selected_data = geo_data[(geo_data['year'].isin(years)) & 
+            # Filter the DataFrame for the selected year, departments, risk_scores, and id_nom
+            selected_data = geo_data[(geo_data['year'] == year) & 
                                      (geo_data['department'].isin(departments)) & 
                                      (geo_data['risk_score'].isin(selected_risk_scores)) &
                                      (geo_data['id_nom'].isin(insee_codes))]
@@ -106,15 +106,10 @@ def main():
             # Use MarkerCluster to cluster the markers for better visualization
             marker_cluster = MarkerCluster().add_to(m1)
         
-            # Check if multiple years are selected
-            multiple_years = len(years) > 1
-        
             # Add markers to the map with tooltips and customized popups
             for idx, row in selected_data.iterrows():
-                # Create the popup content with commune name, risk score, and year if multiple years are selected
+                # Create the popup content with commune name and risk score
                 popup_content = f"<strong>{row['nom_commune']}</strong><br>Risk Score: {row['risk_score']}"
-                if multiple_years:
-                    popup_content += f"<br>Year: {row['year']}"
                 
                 folium.Marker(
                     location=[row['latitude'], row['longitude']],
@@ -150,115 +145,105 @@ def main():
         
             return fig
         
-        # Define the default year range
-        default_year_range = (1990, 2000)
+        # Define the default year range for the plot
+        default_plot_year_range = (1990, 2000)
         
         # Determine the range of years in the dataset
         min_year = int(geo_data['year'].min())
         max_year = int(geo_data['year'].max())
         
-        # Tab 1: Maps
-        with tab1:
-            # Set the theme and aesthetics
-            set_theme()
+        # Sidebar for filters
+        st.sidebar.header("Filters")
         
-            # Sidebar for filters - specific to Tab 1
-            st.sidebar.header("Filters")
+        # Year filter with a slider
+        year_options = geo_data['year'].unique().tolist()
+        selected_year = st.sidebar.slider("Select Year on Map", min_value=min(year_options), max_value=max(year_options), value=max(year_options))
         
-            # Year filter with limit
-            year_options = geo_data['year'].unique().tolist()
-            selected_years = st.sidebar.multiselect("Select Year(s) on Map", options=year_options, default=[2022])
-            if len(selected_years) > 3:
-                st.sidebar.warning("Choice of years limit reached. You can select up to 3 years.")
-                selected_years = selected_years[:3]
+        # Department filter
+        department_options = geo_data['department'].unique().tolist()
+        selected_departments = st.sidebar.multiselect("Select Department(s)", options=department_options, default=["Nord"])
         
-            # Department filter
-            department_options = geo_data['department'].unique().tolist()
-            selected_departments = st.sidebar.multiselect("Select Department(s)", options=department_options, default=["Nord"])
+        # Create a new column 'id_nom' by merging 'insee' and 'nom_commune'
+        geo_data['id_nom'] = geo_data['insee'].astype(str) + ' : ' + geo_data['nom_commune']
         
-            # Create a new column 'id_nom' by merging 'insee' and 'nom_commune'
-            geo_data['id_nom'] = geo_data['insee'].astype(str) + ' : ' + geo_data['nom_commune']
+        # Filter insee options based on selected departments
+        if selected_departments:
+            filtered_insee_options = geo_data.loc[geo_data['department'].isin(selected_departments), 'id_nom'].unique().tolist()
+        else:
+            filtered_insee_options = geo_data['id_nom'].unique().tolist()
         
-            # Filter insee options based on selected departments
-            if selected_departments:
-                filtered_insee_options = geo_data.loc[geo_data['department'].isin(selected_departments), 'id_nom'].unique().tolist()
-            else:
-                filtered_insee_options = geo_data['id_nom'].unique().tolist()
+        # Multiselect to choose communes
+        selected_communes = st.sidebar.multiselect("Select Communes", options=filtered_insee_options, default=filtered_insee_options if not selected_departments else [])
         
-            # Multiselect to choose communes
-            selected_communes = st.sidebar.multiselect("Select Communes", options=filtered_insee_options, default=filtered_insee_options if not selected_departments else [])
+        # Display a message if no communes are selected (default state)
+        if not selected_communes:
+            st.sidebar.caption("All Communes chosen by default")  
         
-            # Display a message if no communes are selected (default state)
-            if not selected_communes:
-                st.sidebar.caption("All Communes chosen by default")  
+        # Risk score checkboxes
+        st.sidebar.subheader("Select Risk Scores")
+        risk_score_labels = {0: "Absent", 1: "Faible", 2: "Moyen", 3: "Élevé"}
+        selected_risk_scores = []
+        for score, label in risk_score_labels.items():
+            if st.sidebar.checkbox(f"Risk Score: {label}", value=True):
+                selected_risk_scores.append(score)
         
-            # Risk score checkboxes
-            st.sidebar.subheader("Select Risk Scores")
-            risk_score_labels = {0: "Absent", 1: "Faible", 2: "Moyen", 3: "Élevé"}
-            selected_risk_scores = []
-            for score, label in risk_score_labels.items():
-                if st.sidebar.checkbox(f"Risk Score: {label}", value=True):
-                    selected_risk_scores.append(score)
+        # Ensure all communes are selected by default if none are selected
+        if not selected_communes:
+            selected_communes = filtered_insee_options
         
-            # Ensure all communes are selected by default if none are selected
-            if not selected_communes:
-                selected_communes = filtered_insee_options
+        # Create the map with selected filters
+        filtered_geo_data = geo_data[
+            (geo_data['id_nom'].isin(selected_communes)) & 
+            (geo_data['risk_score'].isin(selected_risk_scores)) & 
+            (geo_data['year'] == selected_year)
+        ]
         
-            # Create the map with selected filters
-            filtered_geo_data = geo_data[
-                (geo_data['id_nom'].isin(selected_communes)) & 
-                (geo_data['risk_score'].isin(selected_risk_scores))
-            ]
+        # Progress bar for map loading
+        progress_text = "MAP loading. Please wait."
+        my_bar = st.progress(0, text=progress_text)
         
-            # Progress bar for map loading
-            progress_text = "MAP loading. Please wait."
-            my_bar = st.progress(0, text=progress_text)
+        for percent_complete in range(100):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1, text=progress_text)
         
-            for percent_complete in range(100):
-                time.sleep(0.01)
-                my_bar.progress(percent_complete + 1, text=progress_text)
+        # Load the map
+        folium_map = create_risk_map_for_year_department_insee(filtered_geo_data, selected_year, selected_departments, selected_communes, selected_risk_scores)
         
-            # Load the map
-            folium_map = create_risk_map_for_year_department_insee(filtered_geo_data, selected_years, selected_departments, selected_communes, selected_risk_scores)
+        # Display the map or a message if there are NaNs or no data
+        if folium_map:
+            st.components.v1.html(folium_map._repr_html_(), width=1000, height=600, scrolling=True)
+        else:
+            st.write("Sorry either the values are Null, or this data does not exist.")
         
-            # Display the map or a message if there are NaNs or no data
-            if folium_map:
-                st.components.v1.html(folium_map._repr_html_(), width=1000, height=600, scrolling=True)
-            else:
-                st.write("Sorry either the values are Null, or this data does not exist.")
+        my_bar.empty()
         
-            my_bar.empty()
+        st.divider() # a horizontal rule
         
-            # Define the default year range for the plot
-            default_plot_year_range = (1990, 2000)
-            
-            st.divider() #  a horizontal rule
+        # Slider for plot year range
+        st.caption("Filter Range of Risk Year(s) for Plot")
+        selected_plot_year_range = st.slider(
+            "Select Year Range",
+            min_value=min_year,
+            max_value=max_year,
+            value=default_plot_year_range,
+            step=1,
+            format="%d"
+        )
         
-            # Slider for plot year range
-            st.caption("Filter Range of Risk Year(s) for Plot")
-            selected_plot_year_range = st.slider(
-                "Select Year Range",
-                min_value=min_year,
-                max_value=max_year,
-                value=default_plot_year_range,
-                step=1,
-                format="%d"
-            )
+        # Load the plot for "Nord"
+        fig_nord = create_filtered_plot(geo_data, "Nord", selected_plot_year_range)
         
-            # Load the plot for "Nord"
-            fig_nord = create_filtered_plot(geo_data, "Nord", selected_plot_year_range)
+        # Load the plot for "Pas_De_Calais"
+        fig_pas_de_calais = create_filtered_plot(geo_data, "Pas_De_Calais", selected_plot_year_range)
         
-            # Load the plot for "Pas_De_Calais"
-            fig_pas_de_calais = create_filtered_plot(geo_data, "Pas_De_Calais", selected_plot_year_range)
+        # Display plots side by side
+        col1, col2 = st.columns(2)
+        with col1:
+            st.plotly_chart(fig_nord, use_container_width=True, height=600)
+        with col2:
+            st.plotly_chart(fig_pas_de_calais, use_container_width=True, height=600)
         
-            # Display plots side by side
-            col1, col2 = st.columns(2)
-            with col1:
-                st.plotly_chart(fig_nord, use_container_width=True, height=600)
-            with col2:
-                st.plotly_chart(fig_pas_de_calais, use_container_width=True, height=600)
-        
-            st.button("Reset Page")
+        st.button("Reset Page")
 
 
          
