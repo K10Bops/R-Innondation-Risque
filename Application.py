@@ -242,6 +242,16 @@ def main():
             st.plotly_chart(fig_nord, use_container_width=True, height=600)
         with col2:
             st.plotly_chart(fig_pas_de_calais, use_container_width=True, height=600)
+        # Load and display the HTML file for Nord
+        with open(file_path, 'rb', encoding='utf-8') as file:
+            nord_html = file.read().decode("utf-8")  # Decode using utf-8 encoding
+        st.components.v1.html(nord_html, width=1000, height=600, scrolling=True)
+            
+            # Load and display the HTML file for Pas-de-Calais
+        with open(file_path, 'rb', encoding='utf-8') as file:
+            pas_de_calais_html = file.read().decode("utf-8")  # Decode using utf-8 encoding
+        st.components.v1.html(pas_de_calais_html, width=1000, height=600, scrolling=True)
+        
         
         st.button("Reset Page")
 
