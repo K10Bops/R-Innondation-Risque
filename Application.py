@@ -12,7 +12,7 @@ import time
 
 
 # Get the directory of the current script
-current_dir = os.path.dirname(__file__)
+current_dir = os.path.join('tables')
 
 
 
