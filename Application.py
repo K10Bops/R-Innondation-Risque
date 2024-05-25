@@ -39,10 +39,10 @@ pessimist_scenario_df = dataframes[2]
 geo_data_file_path = os.path.join('tables', 'geo_data.csv')
 geo_data = pd.read_csv(geo_data_file_path)
 
-dvf_path = os.path.join('tables', 'geo_data.csv')
+dvf_path = os.path.join('tables', 'dvf_yearly.csv')
 dvf_yearly = pd.read_csv(dvf_path)
 
-basetable_path = os.path.join('tables', 'geo_data.csv')
+basetable_path = os.path.join('tables', 'basetable.csv')
 basetable = pd.read_csv(basetable_path)
 # =============================================================================
 
