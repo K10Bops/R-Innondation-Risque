@@ -39,6 +39,19 @@ geo_data = pd.read_csv(geo_data_file_path)
 
 
 
+# Merge moderate_scenario_df with geo_data on 'insee'
+moderate_scenario_df = pd.merge(moderate_scenario_df, geo_data[['insee', 'nom_commune']], on='insee', how='left')
+moderate_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
+
+# Merge optimist_scenario_df with geo_data on 'insee'
+optimist_scenario_df = pd.merge(optimist_scenario_df, geo_data[['insee', 'nom_commune']], on='insee', how='left')
+optimist_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
+
+# Merge pessimist_scenario_df with geo_data on 'insee'
+pessimist_scenario_df = pd.merge(pessimist_scenario_df, geo_data[['insee', 'nom_commune']], on='insee', how='left')
+pessimist_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
+
+
 
 
 
