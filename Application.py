@@ -147,13 +147,16 @@ def main():
         
             # Add markers to the map with tooltips and customized popups
             for idx, row in selected_data.iterrows():
-                # Create the popup content with commune name and risk score
-                popup_content = f"<strong>{row['nom_commune']}</strong><br>Risk Score: {row['risk_score']}"
-                
+                # Calculate the sum of 'num_cours_deau' and 'num_plan_deau'
+                sum_value = row['num_cours_deau'] + row['num_plan_deau']
+            
+                # Create the popup content with commune name and the sum of 'num_cours_deau' and 'num_plan_deau'
+                popup_content = f"<strong>{row['nom_commune']}</strong><br>Sum of Water Sources: {sum_value}"
+            
                 folium.Marker(
                     location=[row['latitude'], row['longitude']],
                     popup=folium.Popup(popup_content, max_width=300),
-                    tooltip=row['id_nom']
+                    tooltip=row['id_nom']  # Keep the tooltip as it was before
                 ).add_to(marker_cluster)
         
             return m1
