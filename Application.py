@@ -25,7 +25,7 @@ file_names = [
 ]
 
 # Construct the full file paths
-file_paths = [os.path.join(current_dir, 'scenario', file_name) for file_name in file_names]
+file_paths = [os.path.join(current_dir, file_name) for file_name in file_names]
 
 # Reading CSV files
 dataframes = [pd.read_csv(file) for file in file_paths]
