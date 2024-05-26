@@ -411,14 +411,15 @@ def main():
 
         fig_Nord = px.imshow(heatmap_data_Nord, aspect='auto',
                              title='Risk Score Intensity Over Time for Top Communes (Department Nord)',
-                             labels={'color': 'risk_score'},
+                             labels={'color': 'risk_score', 'y': 'Commune'},
                              color_continuous_scale=colorscale)
 
         fig_Pas_De_Calais = px.imshow(heatmap_data_Pas_De_Calais, aspect='auto',
                                       title='Risk Score Intensity Over Time for Top Communes (Department Pas-de-Calais)',
-                                      labels={'color': 'risk_score'},
+                                      labels={'color': 'risk_score', 'y': 'Commune'},
                                       color_continuous_scale=colorscale)
-
+        
+        
         # Display heatmaps in Streamlit
         st.plotly_chart(fig_Nord, use_container_width=True, height=600)
         st.plotly_chart(fig_Pas_De_Calais, use_container_width=True, height=600)
