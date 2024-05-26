@@ -130,7 +130,7 @@ def main():
     set_theme()  # Apply the custom theme
 
     # Create tabs for navigation
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Value Requests"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Buildings Valuations"])
     
     # Tab 1: Maps
     with tab1:
@@ -602,7 +602,7 @@ def main():
         
 # =============================================================================        
     with tab5:
-        st.header("2014-2023 valeurs")
+        st.header("2014-2023 Buildings Valuations")
         
         # Grouped data by 'risk_score'
         grouped_data = dvf_yearly.groupby('risk_score')
