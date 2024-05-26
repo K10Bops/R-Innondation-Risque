@@ -70,7 +70,8 @@ pessimist_scenario_df = pd.merge(pessimist_scenario_df, geo_data[['insee', 'nom_
 pessimist_scenario_df.rename(columns={'nom_commune': 'id_nom'}, inplace=True)
 # Merge moderate_scenario_df with geo_data on 'insee'
 basetable = pd.merge(basetable, geo_data[['insee', 'nom_commune']], on='insee', how='left')
-
+# Preprocess the 'last_occurrence' column to keep only the date part
+geo_data['last_occurrence'] = geo_data['last_occurrence'].astype(str).str[:10]
 
 # =============================================================================
 # FUNCTIONS
