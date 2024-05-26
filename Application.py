@@ -130,7 +130,7 @@ def main():
     set_theme()  # Apply the custom theme
 
     # Create tabs for navigation
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Buildings Valuations"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Building Valuations"])
     
     # Tab 1: Maps
     with tab1:
