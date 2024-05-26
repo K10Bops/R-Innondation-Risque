@@ -327,7 +327,7 @@ def main():
 ##################################################        
     # Tab 2: Visualisations
     with tab2:
-        st.header(f"Visualisations de Inondation")
+        st.header(f"Visualisations of Floods")
         
         # Define the function to display visualizations
         def display_visualization(disaster):
@@ -432,7 +432,6 @@ def main():
     
     # Tab 4: Scenarios
     with tab4:
-        st.subheader("Analyze Different Scenarios")
         # Create a session state variable to track the selected commune index
         if 'selected_commune_index' not in st.session_state:
             st.session_state.selected_commune_index = 0  # Initialize to 0, which corresponds to "Clairmarais"
