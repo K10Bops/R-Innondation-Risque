@@ -55,7 +55,6 @@ basetable = pd.read_csv(basetable_path)
 # =============================================================================
 
 
-
 # DATA Mutation
 # =============================================================================
 # Merge moderate_scenario_df with geo_data on 'insee'
@@ -131,16 +130,16 @@ def main():
     set_theme()  # Apply the custom theme
 
     # Create tabs for navigation
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Cartes", "Visualisations", "Risk Analysis", "Scenario", "Demandes de valeurs"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Value Requests"])
     
     # Tab 1: Maps
     with tab1:
-        st.header("Cartes de Inondation")
-
+                
         # Function to create a risk map for selected year, departments, and insee_codes
         def create_risk_map_for_year_department_insee(geo_data, year, departments, insee_codes, selected_risk_scores):
             # Create a new column 'id_nom' by merging 'insee' and 'nom_commune'
             geo_data['id_nom'] = geo_data['insee'].astype(str) + ' : ' + geo_data['nom_commune']
+            
             
             # Filter the DataFrame for the selected year, departments, risk_scores, and id_nom
             selected_data = geo_data[(geo_data['year'] == year) & 
@@ -158,6 +157,7 @@ def main():
             
             # Initialize a map centered around the mean location
             m1 = folium.Map(location=[mean_lat, mean_lon], zoom_start=10)
+            
             
             # Use MarkerCluster to cluster the markers for better visualization
             marker_cluster = MarkerCluster().add_to(m1)
@@ -237,12 +237,12 @@ def main():
         col1, col2, col3 = st.columns(3)
         with col1:
             year_options = sorted(geo_data['year'].unique().tolist(), reverse=True)
-            selected_year = st.selectbox("Select Year on Map", options=year_options)
+            selected_year = st.selectbox("Select a year", options=year_options)
         
         # Department filter
         with col2:
             department_options = geo_data['department'].unique().tolist()
-            selected_departments = st.multiselect("Select Department(s)", options=department_options, default=["Nord"])
+            selected_departments = st.multiselect("Select Department(s)", options=department_options, default=["Pas_De_Calais"])
         
         # Multiselect to choose communes
         with col3:
@@ -253,15 +253,15 @@ def main():
                 filtered_insee_options = geo_data['id_nom'].unique().tolist()
             
             if selected_departments:
-                selected_communes = st.multiselect("Select Communes", options=filtered_insee_options, default=filtered_insee_options if not selected_departments else [])
+                selected_communes = st.multiselect("Select Commune(s)", options=filtered_insee_options, default=filtered_insee_options if not selected_departments else [])
                 if not selected_communes:
                     st.caption("All Communes chosen by default")
+                    
+                    
+       
         
-        # Risk score checkboxes in horizontal format
-        st.subheader("Select Risk Scores")
-        
-        
-        risk_score_labels = {0: "Absent", 1: "Faible", 2: "Moyen", 3: "Élevé"}
+        st.caption("Select Risk Scores")
+        risk_score_labels = {0: "No expected flood risk", 1: "Low risk", 2: "Moderate risk", 3: "High risk"}
         selected_risk_scores = []
         risk_score_cols = st.columns(len(risk_score_labels))
         for idx, (score, label) in enumerate(risk_score_labels.items()):
@@ -279,6 +279,9 @@ def main():
             (geo_data['year'] == selected_year)
         ]
         
+        st.divider() # a horizontal rule    
+        st.header(f"Map of Department {', '.join(selected_departments)} Flood(s)")          
+        
         # Progress bar for map loading
         progress_text = "MAP loading. Please wait."
         my_bar = st.progress(0, text=progress_text)
@@ -286,11 +289,13 @@ def main():
         for percent_complete in range(100):
             time.sleep(0.01)
             my_bar.progress(percent_complete + 1, text=progress_text)
-        
+            
         # Load the map
         folium_map = create_risk_map_for_year_department_insee(filtered_geo_data, selected_year, selected_departments, selected_communes, selected_risk_scores)
         
-        st.divider() # a horizontal rule
+        # Risk score checkboxes in horizontal format
+        
+        
         
         # Display the map or a message if there are NaNs or no data
         if folium_map:
@@ -299,10 +304,7 @@ def main():
             st.write("Sorry either the values are Null, or this data does not exist.")
         
         my_bar.empty()
-        # Add the "Reset Page" button with a unique key
-        if st.button("Reset Page", key="reset_tab2"):
-            st.experimental_rerun()
-        
+               
         
         st.divider() # a horizontal rule
         
@@ -361,8 +363,8 @@ def main():
 ###############################################################################
     with tab3:
 ### 4 RISK VISAUALISATIONS
-        
-        # Slider for plot year range
+    
+      # Slider for plot year range
         st.caption("Filter Range of Risk Year(s) for Plot")
         selected_plot_year_range = st.slider(
             "Select Year Range",
@@ -421,9 +423,7 @@ def main():
         st.plotly_chart(fig_Nord, use_container_width=True, height=600)
         st.plotly_chart(fig_Pas_De_Calais, use_container_width=True, height=600)
 
-        if st.button("Reset Page", key="reset_tab3"):
-            st.experimental_rerun()        
-        
+   
 
 
 
@@ -433,9 +433,12 @@ def main():
     # Tab 4: Scenarios
     with tab4:
         st.subheader("Analyze Different Scenarios")
+        # Create a session state variable to track the selected commune index
+        if 'selected_commune_index' not in st.session_state:
+            st.session_state.selected_commune_index = 0  # Initialize to 0, which corresponds to "Clairmarais"
     
         # Default selected dataframe
-        selected_df = st.selectbox("Select DataFrame", ["Moderate", "Optimistic", "Pessimistic"], index=1)
+        selected_df = st.selectbox("Select your Scenario", ["Moderate", "Optimistic", "Pessimistic"], index=1)
     
         # Get the selected dataframe and set the default descriptive text
         if selected_df == "Moderate":
@@ -482,7 +485,18 @@ def main():
         # Create filters
         with st.container():
             # Filter by 'id_nom'
-            selected_id_nom = st.selectbox("Select an 'id_nom'", df["id_nom"].unique())
+            # Filter by 'id_nom'
+            commune_options = df["id_nom"].unique().tolist()
+            default_commune = "Clairmarais"
+            
+            # Check if the default commune exists in the options
+            if default_commune in commune_options:
+                default_index = commune_options.index(default_commune)
+            else:
+                default_index = 0  # Fall back to the first option if not found
+            
+            selected_id_nom = st.selectbox("Select Commune", options=commune_options, index=default_index)
+            
              
             # Filter the DataFrame based on the selected 'id_nom' and the year 2024
             selected_data = df[(df['id_nom'] == selected_id_nom) & (df['year'] == 2024)]
@@ -507,7 +521,7 @@ def main():
                 # Generate the dynamic text with bold fonts based on the selected scenario
                 dynamic_text = {
                     "Moderate": f"""
-                    In an **moderate** scenario, **{selected_id_nom}** would have a risk score of **{risk_score}**, indicating 
+                    In a **moderate** scenario, **{selected_id_nom}** would have a risk score of **{risk_score}**, indicating 
                     **{risk_description}**. The average expenditure **{expenditure_change}** **€{estimated_expenditure:,.2f}k**. 
                     In this situation, the average price of meter squared would change by **€{property_depreciation:,.2f}k** in 2024.
                     """,
@@ -528,37 +542,39 @@ def main():
             else:
                 st.write("No data available for the selected ID NOM and year 2024.")
     
-            if st.button("Reset Page", key="reset_tab4"):
-                st.experimental_rerun()
-        
+           
                 st.divider()
 
 
         st.subheader("Historical Depreciation information")
 ############################    
+        # Get list of unique communes
+        communes = basetable['nom_commune'].unique()
         # Create pivot table
         pivot_df = basetable.pivot_table(index='year', columns='nom_commune', values='depreciation')
+              
         # Plotting for Depreciation Since Last Year Over Time by INSEE Code
         fig1 = go.Figure()
-    
+        
         for column in pivot_df.columns:
             fig1.add_trace(go.Scatter(
                 x=pivot_df.index,
                 y=pivot_df[column],
                 mode='lines+markers',
-                name=f'Nom: {column}'
+                name=f'{column}'
             ))
-    
+        
         fig1.update_layout(
-            title='Depreciation by Commune',
+            title='Depreciation by Selected Commune(s)',
             xaxis_title='Year',
-            yaxis_title='Depreciation Since Last Year',
-            legend_title='INSEE Nom',
+            yaxis_title='Depreciation',
+            legend_title='Commune(s)',
             template='plotly_white',
             width = 1200
         )
-    
+        
         st.plotly_chart(fig1)
+
 ############################               
         # Calculating the average depreciation for each year
         average_depreciation = basetable.groupby('year')['depreciation'].mean()
@@ -605,9 +621,9 @@ def main():
             ))
     
         fig1.update_layout(
-            title='Change in Average Prixm2Moyen by Risk Score Over the Years',
+            title='Change in Average Price m² by Risk Score(s)',
             xaxis_title='Year',
-            yaxis_title='Average Prixm2Moyen',
+            yaxis_title='Average Price m²',
             template='plotly_white',
             width = 1200
         )
@@ -642,15 +658,20 @@ def main():
         ))
     
         fig2.update_layout(
-            title='Average Prixm2Moyen Over the Years for Different Risk Scores',
+            title='Average Price m² of Risk Score 0 vs Others',
             xaxis_title='Year',
-            yaxis_title='Average Prixm2Moyen',
+            yaxis_title='Average Price m²',
             template='plotly_white',
             width = 1200
         )
     
-        st.plotly_chart(fig2)    
+        st.plotly_chart(fig2)
+        
         
 if __name__ == "__main__":
     main()
 
+#By Ketan
+# Anais
+# Malek
+#Msc.Big Data 2024
