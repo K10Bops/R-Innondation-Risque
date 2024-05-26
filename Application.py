@@ -602,7 +602,7 @@ def main():
         
 # =============================================================================        
     with tab5:
-        st.header("2014-2023 Buildings Valuations")
+        st.header("2014-2023 Building Valuations")
         
         # Grouped data by 'risk_score'
         grouped_data = dvf_yearly.groupby('risk_score')
