@@ -10,6 +10,7 @@ import plotly.express as px
 from folium.plugins import MarkerCluster
 import time
 import geopandas as gpd
+from pathlib import Path
 
 from pandas.api.types import (
     is_categorical_dtype,
@@ -187,11 +188,25 @@ def main():
                     popup=folium.Popup(popup_content, max_width=300),
                     tooltip=row['id_nom']
                 ).add_to(marker_cluster)
+
+
+
+
+
+
+            # Get the current script's directory
+            base_shp_dir = Path(__file__).resolve().parent
             
+            # Construct the path to the shapefile
+            shapefile_path = base_shp_dir / 'R-Innondation-Risque' / 'ne_110m_admin_0_countries' / 'ne_110m_admin_0_countries.shp'
             
-            shapefile_path = "/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
-            # Sample GeoDataFrame with mixed geometry types
+            # Load the shapefile
             gdf = gpd.read_file(shapefile_path)
+            
+            
+            #shapefile_path = "/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
+            # Sample GeoDataFrame with mixed geometry types
+            #gdf = gpd.read_file(shapefile_path)
             
             # Filter the GeoDataFrame to include only France
             france_geometry = gdf[gdf['ADMIN'] == 'France']
