@@ -188,12 +188,13 @@ def main():
                     tooltip=row['id_nom']
                 ).add_to(marker_cluster)
             
-            # Sample GeoDataFrame with mixed geometry types#
-            gdf = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-            #gdf = gpd.read_file("110m_cultural/ne_110m_admin_0_countries.shp")#
+            # Sample GeoDataFrame with mixed geometry types
+            # gdf = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+            shapefile_path = gpd.read_file("ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp")
+            gdf = gpd.read_file(shapefile_path)
             
             # Filter the GeoDataFrame to include only France
-            france_geometry = gdf[gdf['name'] == 'France']
+            france_geometry = gdf[gdf['ADMIN'] == 'France']
             
             # Add the geometry for France to the map
             for idx, row in france_geometry.iterrows():
