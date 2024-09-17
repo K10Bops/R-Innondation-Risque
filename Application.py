@@ -190,7 +190,7 @@ def main():
             
             # Sample GeoDataFrame with mixed geometry types
             #gdf = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-            gdf = gpd.read_file("zip://path_to_your_folder/110m_cultural.zip!110m_cultural/ne_110m_admin_0_countries.shp")
+            gdf = gpd.read_file("110m_cultural/ne_110m_admin_0_countries.shp")
             
             # Filter the GeoDataFrame to include only France
             france_geometry = gdf[gdf['name'] == 'France']
