@@ -130,7 +130,7 @@ def main():
     set_theme()  # Apply the custom theme
 
     # Create tabs for navigation
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Building Valuations"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Maps", "Visualizations", "Risk Analysis", "Scenario", "Value Requests"])
     
     # Tab 1: Maps
     with tab1:
@@ -188,9 +188,9 @@ def main():
                     tooltip=row['id_nom']
                 ).add_to(marker_cluster)
             
+            
+            shapefile_path = "/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
             # Sample GeoDataFrame with mixed geometry types
-            # gdf = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-            shapefile_path = gpd.read_file("ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp")
             gdf = gpd.read_file(shapefile_path)
             
             # Filter the GeoDataFrame to include only France
