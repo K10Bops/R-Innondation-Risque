@@ -190,23 +190,13 @@ def main():
                 ).add_to(marker_cluster)
 
 
-
-
-
-
-            # Get the current script's directory
-            base_shp_dir = Path(__file__).resolve().parent
-            
-            # Construct the path to the shapefile
-            shapefile_path = base_shp_dir / 'R-Innondation-Risque' / 'ne_110m_admin_0_countries' / 'ne_110m_admin_0_countries.shp'
-            
-            # Load the shapefile
-            gdf = gpd.read_file(shapefile_path)
+                      
             
             
-            #shapefile_path = "/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
+            
+            shapefile_path = "ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
             # Sample GeoDataFrame with mixed geometry types
-            #gdf = gpd.read_file(shapefile_path)
+            gdf = gpd.read_file(shapefile_path)
             
             # Filter the GeoDataFrame to include only France
             france_geometry = gdf[gdf['ADMIN'] == 'France']
